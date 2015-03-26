@@ -8,7 +8,6 @@ List::List()
 {
     head = NULL;
     curr = NULL;
-    temp = NULL;
 }
 
 int List::front()
@@ -42,6 +41,15 @@ void List::remove(int e)
     if(curr == NULL){
         cout << e << " was not in the list\n";
     }
+    else if(curr == head){
+        head->next->prev = NULL;
+        head = head->next;
+        delete curr;
+    }
+    else if(curr->next == NULL){
+        curr->prev->next = NULL;
+        delete curr;
+    }
     else{
         curr->prev->next = curr->next;
         curr->next->prev = curr->prev;
@@ -58,15 +66,19 @@ void List::insertBefore(int p, int e)
     n->e = e;
 
     curr = head;
-
     while(curr != NULL && curr->e != p){
         curr = curr->next;
     }
-    if(curr != NULL){
+    if (curr == head){
+        n->next = head;
+        head->prev = n;
+        head = n;
+    }
+    else if(curr != NULL){
         n->prev = curr->prev;
+        n->next = curr;
         curr->prev->next = n;
         curr->prev = n;
-        n->next = curr;
     }
     else{
         cout << e << "was not in the list\n";
@@ -86,8 +98,14 @@ void List::insertLast(int e)
         while(curr->next != NULL){
             curr = curr->next;
         }
-        curr->next = n;
-        n->prev = curr;
+        if(curr == head){
+            head->next = n;
+            n->prev = head;
+        }
+        else{
+            n->prev = curr;
+            curr->next = n;
+        }
     }
     else{
         head = n;

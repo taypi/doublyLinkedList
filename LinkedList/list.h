@@ -12,7 +12,7 @@ private:
 
     nodeP head;
     nodeP curr;
-    nodeP temp;
+
 public:
     List();
     int front();
